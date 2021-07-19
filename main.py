@@ -4,7 +4,6 @@ arquivo = input("Digite o nome do arquivo")
 ref_arquivo = open(arquivo + '.txt','r')
 
 def SplitList(arq):
-    i = 0
     teste = []
     for linha in arq:
         valores = linha.split()
@@ -20,8 +19,8 @@ def ConvertMatriz(lists):
             matriz = np.zeros((i+1,i+1),dtype='uint8')
             index = False
         else:
-            matriz[i,j] = list[2]
-            matriz[j,i] = list[2]
+            matriz[i,j] = int(list[2])
+            matriz[j,i] = int(list[2])
     return matriz
 
 def ConvertList(lists):
@@ -33,8 +32,9 @@ def ConvertList(lists):
             list_adj = [[]for _ in range(i+1)]
             index = False
         else:
-            list_adj[i].append([j, list[2]])
-            list_adj[j].append([i, list[2]])
+            x = int(list[2])
+            list_adj[i].append([j, x])
+            list_adj[j].append([i, x])
     return list_adj
 
 def Grau(grau):
@@ -86,7 +86,8 @@ def FrequenciaGrau(grau,grauMedio,max):
     print("Frequencia relativa:")
     index = 0
     for freq in frequenciaTotal:
-        print("Grau ", index,": ", freq)
+        if freq > 0.0:
+            print("Grau ", index,": ", freq)
         index += 1
 
 def GrauList(lists):
@@ -108,15 +109,73 @@ def GrauMatriz(matriz):
         index += 1
     Grau(grau)
 
+def BuscaLarguraLista(G, s):
+    desc = [0 for _ in range(len(G))]
+    nivel = [-1 for _ in range(len(G))]
+    Q = [s]
+    R = [s]
+    desc[s] = 1
+    nivel[s] = 0
+    while len(Q) != 0:
+        u = Q.pop(0)
+        print("teste",u)
+        n = nivel[u]+1
+        for v in G[u]:
+            if desc[v[0]] == 0:
+                Q.append(v[0])
+                R.append(v[0])
+                desc[v[0]] = 1
+            if nivel[v[0]] == -1 or nivel[v[0]] >= n:
+                nivel[v[0]] = n
+    print("Vertice:Nivel")
+    for i in range(len(desc)):
+        if nivel[i] >= 0:
+            print(i, ": ", nivel[i])
+
+def BuscaLarguraMatriz(G, s):
+    desc = [0 for _ in range(len(G))]
+    nivel = [-1 for _ in range(len(G))]
+    Q = [s]
+    R = [s]
+    desc[s] = 1
+    nivel[s] = 0
+    while len(Q) != 0:
+        u = Q.pop(0)
+        n = nivel[u]+1
+        index = 0
+        for m in G[u]:
+            if m > 0:
+                if desc[index] == 0:
+                    Q.append(index)
+                    R.append(index)
+                    desc[index] = 1
+                if nivel[index] == -1 or nivel[index] >= n:
+                    nivel[index] = n
+            index += 1
+    print("Vertice:Nivel")
+    for i in range(len(desc)):
+        if nivel[i] >= 0:
+            print(i, ": ", nivel[i])
+
+def BuscaProfundidade (G,s):
+    desc = [0 for i in range(len(G))]
+    S = [s]
+    R = [s]
+    desc[s] = 1
+    while len(S) != 0:
+        u = S[-1]
+        desempilhar = True
+        for v in G[u]:
+            if desc[v] == 0:
+                desempilhar = False
+                S.append(v)
+                R.append(v)
+                desc[v] = 1
+                break
+        if desempilhar:
+            S.pop()
+
 
 tes = SplitList(ref_arquivo)
 te = ConvertMatriz(tes)
-
-GrauMatriz(te)
-
-
-
-
-
-
-
+BuscaLarguraMatriz(te,0)
