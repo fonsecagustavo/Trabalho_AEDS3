@@ -63,11 +63,11 @@ def menuMatriz(arquivo):
 
 #transforma os dados em uma lista
 def SplitList(arq):
-    teste = []
+    dados = []
     for linha in arq:
         valores = linha.split()
-        teste.append(valores)
-    return teste
+        dados.append(valores)
+    return dados
 
 #Converte os dados em uma matriz de adjacentes
 def ConvertMatriz(lists):
