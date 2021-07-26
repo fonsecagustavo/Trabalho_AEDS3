@@ -24,7 +24,7 @@ def menuLista(arquivo):
         print("2 - Informações")
         print("3 - Busca em Grafos: Largura")
         print("4 - Busca em Grafos:  Profundidade")
-        print("5 -Componentes Conexos")
+        print("5 - Componentes Conexos")
         print("0 - Voltar")
         escolha = int(input(""))
         if escolha == 1:
@@ -33,11 +33,11 @@ def menuLista(arquivo):
         elif escolha == 2:
             GrauList(lista)
         elif escolha == 3:
-            BuscaLarguraLista(lista,0)
+            BuscaLarguraLista(lista,1)
         elif escolha == 4:
-            BuscaProfundidadeLista(lista,0)
+            BuscaProfundidadeLista(lista,1)
         elif escolha == 5:
-            print("Sem")
+            ComponentesConexasLista(lista)
 
 def menuMatriz(arquivo):
     matriz = ConvertMatriz(arquivo)
@@ -55,9 +55,9 @@ def menuMatriz(arquivo):
         elif escolha == 2:
             GrauMatriz(matriz)
         elif escolha == 3:
-            BuscaLarguraMatriz(matriz,0)
+            BuscaLarguraMatriz(matriz,1)
         elif escolha == 4:
-            BuscaProfundidadeMatriz(matriz,0)
+            BuscaProfundidadeMatriz(matriz,1)
         elif escolha == 5:
             print("Sem")
 
@@ -282,5 +282,41 @@ def BuscaProfundidadeMatriz (G,s):
     for i in range(len(desc)):
         if nivel[i] >= 0:
             print(i, ": ", nivel[i])
+
+def BuscaProfundidadeListaConexa(G, s, marca):
+    desc = [0 for i in range(len(G))]
+    S = [s]
+    R = [s]
+    desc[s] = 1
+    vComp[s]=marca
+    while len(S) != 0:
+        u = S[-1]
+        desempilhar = True
+        for e in G[u]:
+            v = e[0]
+            if desc[v] == 0:
+                desempilhar = False
+                S.append(v)
+                R.append(v)
+                desc[v] = 1
+                break
+        vComp[u]=marca
+        if desempilhar:
+            S.pop()
+
+
+def ComponentesConexasLista(G):
+    global vComp
+    vComp = [0 for i in range(len(G))]
+    marca = 0
+    for i in range(len(G)):
+        if vComp[i] == 0:
+            marca= marca + 1
+            BuscaProfundidadeListaConexa(G, i, marca)
+
+    print("Componentes Conexas:{}".format(marca))
+    n = max(vComp)
+    for i in range(1,n+1):
+        print("{} vertices".format(vComp.count(i)))
 
 menu()
