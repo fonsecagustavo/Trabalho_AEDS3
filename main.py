@@ -33,11 +33,10 @@ def menuLista(arquivo):
         elif escolha == 2:
             GrauList(lista)
         elif escolha == 3:
-            BuscaLarguraLista(lista,1)
+            BuscaLarguraLista(lista,0)
         elif escolha == 4:
-            BuscaProfundidadeLista(lista,1)
-        elif escolha == 5:
-            ComponentesConexasLista(lista)
+            BuscaProfundidadeLista(lista,0)
+
 
 def menuMatriz(arquivo):
     matriz = ConvertMatriz(arquivo)
@@ -193,10 +192,19 @@ def BuscaLarguraLista(G, s):
                 desc[v[0]] = 1
             if nivel[v[0]] == -1 or nivel[v[0]] >= n:
                 nivel[v[0]] = n
+
+    max = 0
+    indice = 0
+    for x in nivel:
+        if(x > max):
+            max = x
+            vertice = indice
+        indice +=1
     print("Vertice:Nivel")
     for i in range(len(desc)):
         if nivel[i] >= 0:
             print(i, ": ", nivel[i])
+    print("maior nivel: ", max, "Vertice: ", vertice)
 
 #Busca em largura para matriz de adjacentes
 def BuscaLarguraMatriz(G, s):
@@ -283,40 +291,5 @@ def BuscaProfundidadeMatriz (G,s):
         if nivel[i] >= 0:
             print(i, ": ", nivel[i])
 
-def BuscaProfundidadeListaConexa(G, s, marca):
-    desc = [0 for i in range(len(G))]
-    S = [s]
-    R = [s]
-    desc[s] = 1
-    vComp[s]=marca
-    while len(S) != 0:
-        u = S[-1]
-        desempilhar = True
-        for e in G[u]:
-            v = e[0]
-            if desc[v] == 0:
-                desempilhar = False
-                S.append(v)
-                R.append(v)
-                desc[v] = 1
-                break
-        vComp[u]=marca
-        if desempilhar:
-            S.pop()
-
-
-def ComponentesConexasLista(G):
-    global vComp
-    vComp = [0 for i in range(len(G))]
-    marca = 0
-    for i in range(len(G)):
-        if vComp[i] == 0:
-            marca= marca + 1
-            BuscaProfundidadeListaConexa(G, i, marca)
-
-    print("Componentes Conexas:{}".format(marca))
-    n = max(vComp)
-    for i in range(1,n+1):
-        print("{} vertices".format(vComp.count(i)))
 
 menu()
